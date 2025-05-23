@@ -1,0 +1,10 @@
+.temp-page {
+  border: 2px solid red;
+  height: 100vh;
+}
+
+.temp-page button {
+  background-color: gold;
+  height: 2rem;
+  padding: 1rem;
+}

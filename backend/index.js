@@ -1,0 +1,46 @@
+const express = require('express');
+const cors = require('cors');
+const jose = require('jose')
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+
+require('dotenv').config();
+const PORT = process.env.PORT || 5000;
+
+const app = express();
+app.use(express.json());
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cookieParser())
+
+app.use(async (req, res, next) => {
+  if (req.path.endsWith('/ping')) return next()
+  if (['/auth/signup', '/auth/signin'].includes(req.path)) return next()
+
+  const token = req.cookies[process.env.JWT_NAME];
+  if (!token) return res.status(400).send({ message: 'No token present. Sign in' });
+
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const { payload } = await jose.jwtVerify(token, secret);
+    req.user = payload
+    return next()
+  } catch (error) {
+    console.log(error)
+    res.clearCookie(process.env.JWT_NAME);
+    res.status(400).send({ message: 'Invalid or expired token. Sign in again.' });
+  }
+})
+
+app.use('/auth', require('./routes/auth'))
+app.use('/profile', require('./routes/profile'))
+app.use('/scores', require('./routes/scores'))
+
+app.get('/ping', async (req, res) => {
+  res.send({ message: 'index/ping:invoked' })
+})
+
+mongoose.connect(process.env.DB_URL)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

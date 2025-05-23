@@ -1,0 +1,14 @@
+.about-page {
+  color: #545333;
+  /* border: 2px solid red; */
+  height: 100%;
+
+  margin-top: 1rem;
+  font-size: clamp(1rem, 1vw, 2rem);
+
+  list-style-position: inside;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}

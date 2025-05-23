@@ -1,0 +1,102 @@
+:root {
+  --grid-background-color: lightyellow;
+  --cell-border-color: gold;
+  --tile-value-color: inherit;
+}
+
+.game-page {
+  /* border: 2px solid gold; */
+  border-radius: 10px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#grid {
+  background-color: var(--grid-background-color);
+  border-radius: 1rem;
+
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 2rem;
+  max-width: 35rem;
+
+  --cellSize: calc(100% / var(--cellDimensionCount));
+
+  display: grid;
+  grid-template-rows: repeat(var(--cellDimensionCount), var(--cellSize));
+  grid-template-columns: repeat(var(--cellDimensionCount), var(--cellSize));
+
+  position: relative;
+
+  div {
+    border: 0.2rem solid var(--cell-border-color);
+    border-radius: 1rem;
+    margin: 0.5rem;
+  }
+}
+
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: calc(var(--cellSize) - 1rem);
+  aspect-ratio: 1 / 1;
+
+  position: absolute;
+  top: calc(var(--cellSize) * var(--x));
+  left: calc(var(--cellSize) * var(--y));
+  transition: all 100ms linear;
+
+  font-size: min(3rem, 6vw);
+  font-weight: 500;
+  color: var(--tile-value-color);
+
+  --backgound-lightness: 60%;
+  /* background-color: hsl(200, 50%, var(--backgound-lightness)); */
+  /* 90 t0 60 is good */
+  /* background-color: #0CAFFF; */
+  /* background-color: #ADD8E6; */
+  /* background-color: #87CEFA; */
+  /* background-color: #00BFFF; */
+  /* background-color: #0CAFFF; */
+
+  animation: show 100ms ease-in-out
+}
+
+@keyframes show {
+  0% {
+    opacity: 0.5;
+    transform: scale(0);
+  }
+}
+
+.stats {
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  background-color: #fffaf0; /* Light beige */
+  border: 1px solid #d2b48c; /* Tan */
+  border-radius: 8px;
+  max-width: 300px;
+  color: #3e2f2f; /* Brown text */
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stats p {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e3d5b8;
+}
+
+.stats p:last-child {
+  border-bottom: none;
+}
+
+.stats p span {
+  font-weight: bold;
+}

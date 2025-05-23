@@ -1,0 +1,49 @@
+.history-container {
+  /* background-color: #f5f5dc; */
+  /* Beige */
+  min-height: 100%;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.history-title {
+  color: #5c4033;
+  /* Dark brown */
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fffaf0;
+  /* Light beige */
+  color: #3e2f2f;
+  /* Darker brown for text */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.history-table th,
+.history-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #d2b48c;
+  /* Tan */
+  word-break: break-word;
+}
+
+.history-table th {
+  background-color: #d2b48c;
+  /* Tan */
+  text-transform: uppercase;
+}
+
+.even-row {
+  background-color: #fdf6e3;
+  /* Lighter beige */
+}
+
+.odd-row {
+  background-color: #f5f5dc;
+  /* Beige */
+}
