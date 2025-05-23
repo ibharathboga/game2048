@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
   const checkAuth = async () => {
     setIsCheckAuthLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/auth/me', {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/auth/me`, {
         withCredentials: true,
       });
       setUser(response.data)
@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
   const handleSignOut = async () => {
     const itoast = toast.loading('Signing in...', { position: 'bottom-right' })
     try {
-      const response = await axios.get('http://localhost:8000/auth/signout', { withCredentials: true });
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/auth/signout`, { withCredentials: true });
       setUser({})
       setIsAuthenticated(false)
       toast.update(itoast, {

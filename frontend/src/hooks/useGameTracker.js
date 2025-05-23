@@ -75,7 +75,7 @@ function useGameTracker(board) {
 
       try {
         const response = await axios.post(
-          'http://localhost:8000/scores/',
+          `${process.env.REACT_APP_API_URL}/scores/`,
           { duration, highestTileScore: currHighestTileScore, moves },
           { withCredentials: true }
         )

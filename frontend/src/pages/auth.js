@@ -35,7 +35,7 @@ function AuthPage() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/signup',
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signup`,
         { username, email, password },
         { withCredentials: true }
       )
@@ -73,7 +73,7 @@ function AuthPage() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/auth/signin',
+        `${process.env.REACT_APP_API_URL}/auth/signin`,
         { email, password },
         { withCredentials: true }
       );

@@ -27,7 +27,7 @@ function ProfilePage() {
 
     try {
       const response = await axios.put(
-        'http://localhost:8000/profile/',
+        `${process.env.REACT_APP_API_URL}/profile/`,
         { username, email },
         { withCredentials: true }
       );
@@ -89,7 +89,7 @@ function ProfilePage() {
 
     try {
       const response = await axios.put(
-        'http://localhost:8000/profile/password',
+        `${process.env.REACT_APP_API_URL}/profile/password`,
         { oldPassword, newPassword },
         { withCredentials: true }
       );
@@ -117,7 +117,7 @@ function ProfilePage() {
     e.preventDefault()
     try {
       const response = await axios.delete(
-        'http://localhost:8000/profile/',
+        `${process.env.REACT_APP_API_URL}/profile/`,
         { withCredentials: true }
       );
       console.log(response.data);
@@ -132,7 +132,7 @@ function ProfilePage() {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        'http://localhost:8000/profile/',
+        `${process.env.REACT_APP_API_URL}/profile/`,
         { withCredentials: true }
       );
       setProfile(response.data);
