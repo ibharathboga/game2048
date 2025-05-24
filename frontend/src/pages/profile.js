@@ -138,7 +138,7 @@ function ProfilePage() {
       setProfile(response.data);
       console.log(response.data);
     } catch (error) {
-      console.lwog(error);
+      console.log(error);
     }
     setIsLoading(false);
   };
