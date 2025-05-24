@@ -28,7 +28,8 @@ router.get('/ping', async (req, res) => {
 
   res.cookie(process.env.JWT_NAME, token, {
     httpOnly: true,
-    sameSite: 'strict',
+    // sameSite: 'strict',
+    sameSite: 'none',
     path: '/',
     maxAge: parseInt(process.env.JWT_DURATION) * 1000,
   });

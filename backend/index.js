@@ -9,10 +9,11 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: process.env.REACT_APP_URL, credentials: true }));
+app.use(cors({ origin: [process.env.REACT_APP_URL], credentials: true }));
 app.use(cookieParser())
 
 app.use(async (req, res, next) => {
+
   if (req.path.endsWith('/ping')) return next()
   if (['/auth/signup', '/auth/signin'].includes(req.path)) return next()
 

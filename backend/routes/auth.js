@@ -52,7 +52,9 @@ router.post('/signin', async (req, res) => {
 
     res.cookie(process.env.JWT_NAME, token, {
       httpOnly: true,
-      sameSite: 'strict',
+      // sameSite: 'strict',
+      sameSite: 'none',
+      secure: true,
       path: '/',
       maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
     });
@@ -65,7 +67,10 @@ router.post('/signin', async (req, res) => {
 
 router.get('/signout', async (req, res) => {
   try {
-    res.clearCookie(process.env.JWT_NAME);
+    res.clearCookie(process.env.JWT_NAME, {
+      sameSite: 'none',
+      secure: true,
+    });
     res.send({ message: "You've been signed out" })
   } catch (error) {
     res.status(500).send({ message: 'Sign out failed. Try again later.' })
