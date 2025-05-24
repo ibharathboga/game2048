@@ -11,7 +11,7 @@ function LeaderboardPage() {
     console.log('leaderboardPageEffect:invoked')
     try {
       const response = await axios.get(
-        `${REACT_APP_API_URL}/scores/`,
+        `${process.env.REACT_APP_API_URL}/scores/`,
         { withCredentials: true },
       )
       setLeaderboard(prev => response.data)

@@ -10,7 +10,7 @@ function TempoPage() {
 
 
     try {
-      const response = await axios.get(process.env.API_URL)
+      const response = await axios.get(process.env.REACT_APP_API_URL)
       console.log(response.data);
     } catch (error) {
       console.log("handleClick:error");

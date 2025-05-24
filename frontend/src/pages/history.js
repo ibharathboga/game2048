@@ -10,7 +10,7 @@ function HistoryPage() {
     console.log('historyPageEffect:invoked')
     try {
       const response = await axios.get(
-        `${REACT_APP_API_URL}/scores/user`,
+        `${process.env.REACT_APP_API_URL}/scores/user`,
         { withCredentials: true },
       )
       setHistory(prev => response.data)
