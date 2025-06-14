@@ -71,7 +71,7 @@ router.post('/signin', async (req, res) => {
       httpOnly: false,
       secure: true,
       sameSite: "none",
-      maxAge: `2h`,
+      maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
       path: "/"
     });
 
