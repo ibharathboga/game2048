@@ -50,14 +50,23 @@ router.post('/signin', async (req, res) => {
     //   maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
     // });
 
+    // res.cookie(process.env.JWT_NAME, token, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'none',
+    //   domain: 'game2048-orcin-three.vercel.app',
+    //   path: '/',
+    //   maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
+    // });
+
     res.cookie(process.env.JWT_NAME, token, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      domain: 'game2048-orcin-three.vercel.app',
       path: '/',
-      maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
+      maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000
     });
+
 
     res.status(200).send({ payload });
   } catch (error) {
