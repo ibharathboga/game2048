@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const jose = require('jose')
+const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
 
 const User = require('../models/User');
@@ -41,14 +41,7 @@ router.post('/signin', async (req, res) => {
     if (!isMatch) return res.status(500).send({ message: 'Invalid credentials' });
 
     const payload = { id: user._id.toString(), username: user.username, email: user.email }
-
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const token = await new jose.SignJWT(payload)
-      .setProtectedHeader({ alg: process.env.JWT_ALGORITHM })
-      .setIssuedAt()
-      // .setExpirationTime(`${parseInt(process.env.JWT_DURATION)}s`)
-      .setExpirationTime(`2h`)
-      .sign(secret);
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { algorithm: process.env.JWT_ALGORITHM, expiresIn: `2h` })
 
     res.cookie(process.env.JWT_NAME, token, {
       httpOnly: true,

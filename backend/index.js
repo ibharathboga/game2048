@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const jose = require('jose')
+const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
@@ -21,8 +21,7 @@ app.use(async (req, res, next) => {
   if (!token) return res.status(400).send({ message: 'No token present. Sign in' });
 
   try {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const { payload } = await jose.jwtVerify(token, secret);
+    const { payload } = jwt.verify(token, process.env.JWT_SECRET)
     req.user = payload
     return next()
   } catch (error) {
