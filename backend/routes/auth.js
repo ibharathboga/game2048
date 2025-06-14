@@ -59,14 +59,21 @@ router.post('/signin', async (req, res) => {
     //   maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
     // });
 
-    res.cookie(process.env.JWT_NAME, token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      path: '/',
-      maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000
-    });
+    // res.cookie(process.env.JWT_NAME, token, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'none',
+    //   path: '/',
+    //   maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000
+    // });
 
+    res.cookie(process.env.JWT_NAME, token, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+      maxAge: `2h`,
+      path: "/"
+    });
 
     res.status(200).send({ payload });
   } catch (error) {
