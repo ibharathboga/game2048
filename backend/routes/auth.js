@@ -43,12 +43,22 @@ router.post('/signin', async (req, res) => {
     const payload = { id: user._id.toString(), username: user.username, email: user.email }
     const token = jwt.sign(payload, process.env.JWT_SECRET, { algorithm: process.env.JWT_ALGORITHM, expiresIn: `2h` })
 
+    // res.cookie(process.env.JWT_NAME, token, {
+    //   httpOnly: true,
+    //   sameSite: 'strict',
+    //   path: '/',
+    //   maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
+    // });
+
     res.cookie(process.env.JWT_NAME, token, {
       httpOnly: true,
-      sameSite: 'strict',
+      secure: true,
+      sameSite: 'none',
+      domain: 'vercel.app',
       path: '/',
       maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
     });
+
     res.status(200).send({ payload });
   } catch (error) {
     console.log(error)
