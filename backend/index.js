@@ -14,6 +14,7 @@ app.use(cookieParser())
 
 app.use(async (req, res, next) => {
   if (req.path.endsWith('/ping')) return next()
+  if (req.path.endsWith('favicon.ico')) return next()
   if (['/auth/signup', '/auth/signin'].includes(req.path)) return next()
 
   const token = req.cookies[process.env.JWT_NAME];
@@ -35,6 +36,7 @@ app.use('/auth', require('./routes/auth'))
 app.use('/profile', require('./routes/profile'))
 app.use('/scores', require('./routes/scores'))
 
+app.get('/favicon.ico', (req, res) => res.status(204));
 app.get('/ping', async (req, res) => {
   res.send({ message: 'index/ping:invoked' })
 })
