@@ -54,7 +54,7 @@ router.post('/signin', async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      domain: 'vercel.app',
+      domain: 'game2048-orcin-three.vercel.app',
       path: '/',
       maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
     });
