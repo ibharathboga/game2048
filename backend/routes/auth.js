@@ -43,30 +43,6 @@ router.post('/signin', async (req, res) => {
     const payload = { id: user._id.toString(), username: user.username, email: user.email }
     const token = jwt.sign(payload, process.env.JWT_SECRET, { algorithm: process.env.JWT_ALGORITHM, expiresIn: `2h` })
 
-    // res.cookie(process.env.JWT_NAME, token, {
-    //   httpOnly: true,
-    //   sameSite: 'strict',
-    //   path: '/',
-    //   maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
-    // });
-
-    // res.cookie(process.env.JWT_NAME, token, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: 'none',
-    //   domain: 'game2048-orcin-three.vercel.app',
-    //   path: '/',
-    //   maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
-    // });
-
-    // res.cookie(process.env.JWT_NAME, token, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: 'none',
-    //   path: '/',
-    //   maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000
-    // });
-
     res.cookie(process.env.JWT_NAME, token, {
       httpOnly: true,          // ✅ safer (helps prevent XSS)
       secure: true,            // ✅ required for cross-site cookies over HTTPS
@@ -74,6 +50,9 @@ router.post('/signin', async (req, res) => {
       path: '/',               // ✅ good default
       maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
     });
+
+
+
     console.log(token, process.env.JWT_NAME, payload);
 
     res.status(200).send({ payload });
@@ -85,6 +64,9 @@ router.post('/signin', async (req, res) => {
 
 router.get('/signout', async (req, res) => {
   try {
+
+    // res.clearCookie(process.env.JWT_NAME)
+
     // res.clearCookie(process.env.JWT_NAME, {
     //   httpOnly: true,
     //   secure: true,
@@ -92,13 +74,16 @@ router.get('/signout', async (req, res) => {
     //   path: '/',
     // });
 
-    res.cookie(process.env.JWT_NAME, '', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      path: '/',
-      maxAge: 0,
-    });
+    // res.cookie(process.env.JWT_NAME, '', {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'none',
+    //   path: '/',
+    //   expires: new Date(0),  // ✅ better than maxAge: 0
+    // });
+
+    res.clearCookie(process.env.JWT_NAME);
+
     res.send({ message: "You've been signed out" })
   } catch (error) {
     res.status(500).send({ message: 'Sign out failed. Try again later.' })
