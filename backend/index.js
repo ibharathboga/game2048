@@ -21,8 +21,7 @@ app.use(async (req, res, next) => {
   if (!token) return res.status(400).send({ message: 'No token present. Sign in' });
 
   try {
-    const { payload } = jwt.verify(token, process.env.JWT_SECRET)
-    req.user = payload
+    req.user = jwt.verify(token, process.env.JWT_SECRET)
     return next()
   } catch (error) {
     console.log(error)
