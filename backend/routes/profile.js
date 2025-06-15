@@ -21,6 +21,7 @@ router.get('/', async (req, res) => {
     const user = { id, username, email, createdAt, updatedAt }
     res.send(user);
   } catch (err) {
+    console.log(err);
     res.status(500).send({ message: 'Server error' });
   }
 });
