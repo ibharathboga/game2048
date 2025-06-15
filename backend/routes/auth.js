@@ -68,8 +68,10 @@ router.post('/signin', async (req, res) => {
     // });
 
     res.cookie(process.env.JWT_NAME, token, {
-      httpOnly: false,
-      secure: true,
+      httpOnly: true,          // ✅ safer (helps prevent XSS)
+      secure: true,            // ✅ required for cross-site cookies over HTTPS
+      sameSite: 'none',        // ✅ required for cross-site cookies
+      path: '/',               // ✅ good default
       maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
     });
     console.log(token, process.env.JWT_NAME, payload);
@@ -84,10 +86,10 @@ router.post('/signin', async (req, res) => {
 router.get('/signout', async (req, res) => {
   try {
     res.clearCookie(process.env.JWT_NAME, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
-      // path:
-      // domain:
+      sameSite: 'none',
+      path: '/',
     });
     res.send({ message: "You've been signed out" })
   } catch (error) {
