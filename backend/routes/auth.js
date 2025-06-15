@@ -97,7 +97,7 @@ router.get('/signout', async (req, res) => {
       secure: true,
       sameSite: 'none',
       path: '/',
-      expires: new Date(0),
+      maxAge: 0,
     });
     res.send({ message: "You've been signed out" })
   } catch (error) {
