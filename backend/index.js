@@ -25,7 +25,14 @@ app.use(async (req, res, next) => {
     return next()
   } catch (error) {
     console.log(error)
-    res.clearCookie(process.env.JWT_NAME);
+    // res.clearCookie(process.env.JWT_NAME);
+    res.cookie(process.env.JWT_NAME, '', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+      // expires: new Date(0),  // ✅ better than maxAge: 0
+    });
     res.status(400).send({ message: 'Invalid or expired token. Sign in again.' });
   }
 })
