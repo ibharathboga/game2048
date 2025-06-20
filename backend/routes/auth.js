@@ -44,10 +44,11 @@ router.post('/signin', async (req, res) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET, { algorithm: process.env.JWT_ALGORITHM, expiresIn: `2h` })
 
     res.cookie(process.env.JWT_NAME, token, {
-      httpOnly: true,          // ✅ safer (helps prevent XSS)
+      httpOnly: false,          // ✅ safer (helps prevent XSS)
       secure: true,            // ✅ required for cross-site cookies over HTTPS
       sameSite: 'none',        // ✅ required for cross-site cookies
       path: '/',               // ✅ good default
+      domain: '.vercel.app',
       maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
     });
 
@@ -84,11 +85,13 @@ router.get('/signout', async (req, res) => {
 
     // res.clearCookie(process.env.JWT_NAME);
 
-    res.cookie(process.env.JWT_NAME, '', {
-      httpOnly: true,
+    res.cookie(process.env.JWT_NAME, 'invalid', {
+      httpOnly: false,
       secure: true,
       sameSite: 'none',
       path: '/',
+      domain: '.vercel.app',
+      maxAge: 1
     });
 
     res.send({ message: "You've been signed out" })

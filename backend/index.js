@@ -34,11 +34,13 @@ app.use(async (req, res, next) => {
     //   // expires: new Date(0),  // ✅ better than maxAge: 0
     // });
 
-    res.cookie(process.env.JWT_NAME, '', {
-      httpOnly: true,
+    res.cookie(process.env.JWT_NAME, 'invalid', {
+      httpOnly: false,
       secure: true,
       sameSite: 'none',
       path: '/',
+      domain: '.vercel.app',
+      maxAge: 1
     });
     res.status(400).send({ message: 'Invalid or expired token. Sign in again.' });
   }
