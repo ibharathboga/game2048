@@ -82,7 +82,14 @@ router.get('/signout', async (req, res) => {
     //   expires: new Date(0),  // ✅ better than maxAge: 0
     // });
 
-    res.clearCookie(process.env.JWT_NAME);
+    // res.clearCookie(process.env.JWT_NAME);
+
+    res.clearCookie(process.env.JWT_NAME, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+    });
 
     res.send({ message: "You've been signed out" })
   } catch (error) {
