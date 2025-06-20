@@ -84,7 +84,7 @@ router.get('/signout', async (req, res) => {
 
     // res.clearCookie(process.env.JWT_NAME);
 
-    res.clearCookie(process.env.JWT_NAME, {
+    res.cookie(process.env.JWT_NAME, '', {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
