@@ -44,14 +44,13 @@ router.post('/signin', async (req, res) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET, { algorithm: process.env.JWT_ALGORITHM, expiresIn: `2h` })
 
     res.cookie(process.env.JWT_NAME, token, {
-      httpOnly: false,          // ✅ safer (helps prevent XSS)
-      secure: true,            // ✅ required for cross-site cookies over HTTPS
-      sameSite: 'none',        // ✅ required for cross-site cookies
-      path: '/',               // ✅ good default
-      domain: '.vercel.app',
-      maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
+      // domain: '.vercel.app',  // root domain to include all subdomains
+      // path: '/',               // cookie valid for all paths
+      secure: true,            // only over HTTPS
+      httpOnly: true,          // not accessible to JS
+      sameSite: 'None',        // allow cross-site (subdomain) requests
+      // maxAge: 7 * 24 * 3600 * 1000   // e.g. 7 days
     });
-
 
 
     console.log(token, process.env.JWT_NAME, payload);
@@ -66,14 +65,16 @@ router.post('/signin', async (req, res) => {
 router.get('/signout', async (req, res) => {
   try {
 
-    // res.clearCookie(process.env.JWT_NAME)
+    res.clearCookie(process.env.JWT_NAME, {
+      // domain: '.vercel.app',
+      // path: '/',
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None'
+    });
+    res.json({ success: true, message: 'Logged out' });
 
-    // res.clearCookie(process.env.JWT_NAME, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: 'none',
-    //   path: '/',
-    // });
+
 
     // res.cookie(process.env.JWT_NAME, '', {
     //   httpOnly: true,
@@ -83,18 +84,7 @@ router.get('/signout', async (req, res) => {
     //   expires: new Date(0),  // ✅ better than maxAge: 0
     // });
 
-    // res.clearCookie(process.env.JWT_NAME);
-
-    res.cookie(process.env.JWT_NAME, 'invalid', {
-      httpOnly: false,
-      secure: true,
-      sameSite: 'none',
-      path: '/',
-      domain: '.vercel.app',
-      maxAge: 1
-    });
-
-    res.send({ message: "You've been signed out" })
+    res.status(200).send({ message: "You've been signed out" })
   } catch (error) {
     res.status(500).send({ message: 'Sign out failed. Try again later.' })
   }

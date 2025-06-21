@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: process.env.REACT_APP_URL, credentials: true }));
+app.use(cors({ origin: process.env.REACT_APP_URL, credentials: true , }));
 app.use(cookieParser())
 
 app.use(async (req, res, next) => {
@@ -25,23 +25,24 @@ app.use(async (req, res, next) => {
     return next()
   } catch (error) {
     console.log(error)
-    // res.clearCookie(process.env.JWT_NAME);
-    // res.cookie(process.env.JWT_NAME, '', {
-    //   httpOnly: true,
+    // res.clearCookie(process.env.JWT_NAME, {
+    // sameSite: 'None',        // ✅ required for cross-site cookies
+    // secure: true,            // ✅ required for cross-site cookies over HTTPS
+    // path: '/',               // ✅ good default
+    // domain: '.vercel.app',
+    // httpOnly: false,          // ✅ safer (helps prevent XSS)
+    // maxAge: parseInt(process.env.JWT_DURATION) * 60 * 60 * 1000,
+    // })
+
+    // res.cookie(process.env.JWT_NAME, 'invalid', {
+    //   httpOnly: false,
     //   secure: true,
     //   sameSite: 'none',
     //   path: '/',
-    //   // expires: new Date(0),  // ✅ better than maxAge: 0
+    //   domain: '.vercel.app',
+    //   maxAge: 1
     // });
 
-    res.cookie(process.env.JWT_NAME, 'invalid', {
-      httpOnly: false,
-      secure: true,
-      sameSite: 'none',
-      path: '/',
-      domain: '.vercel.app',
-      maxAge: 1
-    });
     res.status(400).send({ message: 'Invalid or expired token. Sign in again.' });
   }
 })
