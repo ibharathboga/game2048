@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken')
+const nocache = require('nocache');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
@@ -9,7 +10,8 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: process.env.REACT_APP_URL, credentials: true , }));
+app.use(nocache());
+app.use(cors({ origin: process.env.REACT_APP_URL, credentials: true, }));
 app.use(cookieParser())
 
 app.use(async (req, res, next) => {
