@@ -49,7 +49,7 @@ router.post('/signin', async (req, res) => {
       secure: true,            // only over HTTPS
       httpOnly: true,          // not accessible to JS
       sameSite: 'None',        // allow cross-site (subdomain) requests
-      // maxAge: 7 * 24 * 3600 * 1000   // e.g. 7 days
+      maxAge: 7 * 24 * 3600 * 1000   // e.g. 7 days
     });
 
 
