@@ -1,8 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
-import LoadingPage from '../pages/loading';
-import { toast } from 'react-toastify';
+import LoadingPage from "../pages/loading";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext(null);
 
@@ -14,11 +14,14 @@ export function AuthProvider({ children }) {
   const checkAuth = async () => {
     setIsCheckAuthLoading(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/auth/me`, {
-        withCredentials: true,
-      });
-      setUser(response.data)
-      setIsAuthenticated(true)
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/auth/me`,
+        {
+          withCredentials: true,
+        },
+      );
+      setUser(response.data);
+      setIsAuthenticated(true);
     } catch (error) {
       // console.log('checkAuth:error caught');
       // console.error(error);
@@ -27,33 +30,38 @@ export function AuthProvider({ children }) {
   };
 
   const handleSignOut = async () => {
-    const itoast = toast.loading('Signing in...', { position: 'bottom-right' })
+    const itoast = toast.loading("Signing in...", { position: "bottom-right" });
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/auth/signout`, { withCredentials: true });
-      setUser({})
-      setIsAuthenticated(false)
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/auth/signout`,
+        { withCredentials: true },
+      );
+      setUser({});
+      setIsAuthenticated(false);
       toast.update(itoast, {
         render: response.data.message,
         type: "success",
         isLoading: false,
-        autoClose: 2000
-      })
+        autoClose: 2000,
+      });
     } catch (error) {
       // console.log('handleSignOut:error caught')
       // console.error(error);
 
-      let errorMessage = error.response?.data.message
-      errorMessage = errorMessage ? errorMessage : error.message
+      let errorMessage = error.response?.data.message;
+      errorMessage = errorMessage ? errorMessage : error.message;
       toast.update(itoast, {
         render: errorMessage,
         type: "error",
         isLoading: false,
-        autoClose: 2000
-      })
+        autoClose: 2000,
+      });
     }
   };
 
-  useEffect(() => { checkAuth(); }, []);
+  useEffect(() => {
+    checkAuth();
+  }, []);
   return (
     <AuthContext.Provider
       value={{
@@ -66,7 +74,6 @@ export function AuthProvider({ children }) {
         handleSignOut,
       }}
     >
-
       {isCheckAuthLoading ? <LoadingPage /> : children}
     </AuthContext.Provider>
   );

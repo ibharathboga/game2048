@@ -1,24 +1,25 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import '../styles/history.css'
+import axios from "axios";
+import { useEffect, useState } from "react";
+import "../styles/history.css";
 
 function HistoryPage() {
-
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState([]);
 
   const historyPageEffect = async () => {
-    console.log('historyPageEffect:invoked')
+    console.log("historyPageEffect:invoked");
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/scores/user`,
         { withCredentials: true },
-      )
-      setHistory(prev => response.data)
+      );
+      setHistory((prev) => response.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-  useEffect(() => { historyPageEffect(); }, [])
+  };
+  useEffect(() => {
+    historyPageEffect();
+  }, []);
 
   return (
     <div className="history-page">
@@ -35,7 +36,10 @@ function HistoryPage() {
           </thead>
           <tbody>
             {history.map((entry, index) => (
-              <tr key={entry._id} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
+              <tr
+                key={entry._id}
+                className={index % 2 === 0 ? "even-row" : "odd-row"}
+              >
                 <td>{entry.duration}</td>
                 <td>{entry.highestTileScore}</td>
                 <td>{entry.moves}</td>
@@ -46,7 +50,7 @@ function HistoryPage() {
         </table>
       </div>
     </div>
-  )
+  );
 }
 
-export default HistoryPage
+export default HistoryPage;

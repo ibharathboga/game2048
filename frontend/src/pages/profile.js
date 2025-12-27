@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-import '../styles/profile.css';
-import LoadingPage from './loading';
+import "../styles/profile.css";
+import LoadingPage from "./loading";
 
-import { useAuth } from '../providers/AuthProvider'
-import { useNavigate } from 'react-router-dom';
-import { Bounce, toast } from 'react-toastify';
+import { useAuth } from "../providers/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import { Bounce, toast } from "react-toastify";
 
 function ProfilePage() {
   const { user, setUser } = useAuth();
@@ -14,7 +14,7 @@ function ProfilePage() {
   const [profile, setProfile] = useState({});
   const [isEditing, setIsEditing] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSave = async (e) => {
     console.log("handleSave:invoked");
@@ -29,7 +29,7 @@ function ProfilePage() {
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/profile/`,
         { username, email },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       const updatedProfile = response.data;
@@ -38,14 +38,16 @@ function ProfilePage() {
       setProfile(updatedProfile);
       setIsEditing(false);
 
-      if (user.email !== updatedProfile.email || user.username !== updatedProfile.username) {
+      if (
+        user.email !== updatedProfile.email ||
+        user.username !== updatedProfile.username
+      ) {
         setUser((prev) => ({
           ...prev,
           email: updatedProfile.email,
           username: updatedProfile.username,
         }));
       }
-
     } catch (error) {
       const errorMessage = error.response?.data?.message ?? error.message;
       console.log(errorMessage);
@@ -55,7 +57,7 @@ function ProfilePage() {
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
-        type: 'error',
+        type: "error",
         draggable: true,
         progress: undefined,
         theme: "light",
@@ -72,29 +74,29 @@ function ProfilePage() {
     const confirmPassword = e.target.confirmPassword.value;
 
     if (oldPassword === newPassword || newPassword !== confirmPassword) {
-      toast('Passwords do not match', {
+      toast("Passwords do not match", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
-        type: 'error',
+        type: "error",
         draggable: true,
         progress: undefined,
         theme: "light",
         transition: Bounce,
       });
       return;
-    };
+    }
 
     try {
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/profile/password`,
         { oldPassword, newPassword },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       e.target.reset();
-      setIsEditing(false)
+      setIsEditing(false);
       // window.location.reload();
     } catch (error) {
       console.log(error);
@@ -104,7 +106,7 @@ function ProfilePage() {
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
-        type: 'error',
+        type: "error",
         draggable: true,
         progress: undefined,
         theme: "light",
@@ -114,17 +116,16 @@ function ProfilePage() {
   };
 
   const handleDeleteAccount = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const response = await axios.delete(
         `${process.env.REACT_APP_API_URL}/profile/`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       console.log(response.data);
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       console.log(error);
-
     }
   };
 
@@ -133,7 +134,7 @@ function ProfilePage() {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/profile/`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setProfile(response.data);
       console.log(response.data);
@@ -150,19 +151,30 @@ function ProfilePage() {
   if (isLoading) return <LoadingPage />;
 
   return (
-    <div className='profile-page'>
+    <div className="profile-page">
       <h1>Profile</h1>
 
-      <div className='profile-details'>
-        <p><strong>Username:</strong> {profile.username}</p>
-        <p><strong>Email:</strong> {profile.email}</p>
-        <p><strong>Created At:</strong> {profile.createdAt}</p>
-        <p><strong>Updated At:</strong> {profile.updatedAt}</p>
+      <div className="profile-details">
+        <p>
+          <strong>Username:</strong> {profile.username}
+        </p>
+        <p>
+          <strong>Email:</strong> {profile.email}
+        </p>
+        <p>
+          <strong>Created At:</strong> {profile.createdAt}
+        </p>
+        <p>
+          <strong>Updated At:</strong> {profile.updatedAt}
+        </p>
       </div>
 
-      <div className='buttons'>
-        <button className="edit-button" onClick={() => setIsEditing(!isEditing)}>
-          {isEditing ? 'Cancel Edit' : 'Edit Profile'}
+      <div className="buttons">
+        <button
+          className="edit-button"
+          onClick={() => setIsEditing(!isEditing)}
+        >
+          {isEditing ? "Cancel Edit" : "Edit Profile"}
         </button>
         <button className="delete-button" onClick={handleDeleteAccount}>
           Delete Account
@@ -170,7 +182,7 @@ function ProfilePage() {
       </div>
 
       <form
-        className={`profile-form ${isEditing ? 'active' : ''}`}
+        className={`profile-form ${isEditing ? "active" : ""}`}
         onSubmit={handleSave}
       >
         <label htmlFor="username">Username</label>
@@ -179,7 +191,7 @@ function ProfilePage() {
           name="username"
           id="username"
           autoComplete="off"
-          defaultValue={profile.username || ''}
+          defaultValue={profile.username || ""}
         />
 
         <label htmlFor="email">Email</label>
@@ -188,50 +200,50 @@ function ProfilePage() {
           name="email"
           id="email"
           autoComplete="email"
-          defaultValue={profile.email || ''}
+          defaultValue={profile.email || ""}
         />
 
         <button type="submit">Save</button>
       </form>
 
-      {isEditing ? <form
-        className={`profile-form ${isEditing ? 'active' : ''}`}
-        onSubmit={handleSavePassword}
-      >
-        <label htmlFor="oldpassword">Old Password</label>
-        <input
-          type="password"
-          id="oldpassword"
-          name="oldPassword"
-          minLength={8}
-          required
-          autoComplete="current-password"
-        />
+      {isEditing ? (
+        <form
+          className={`profile-form ${isEditing ? "active" : ""}`}
+          onSubmit={handleSavePassword}
+        >
+          <label htmlFor="oldpassword">Old Password</label>
+          <input
+            type="password"
+            id="oldpassword"
+            name="oldPassword"
+            minLength={8}
+            required
+            autoComplete="current-password"
+          />
 
-        <label htmlFor="newpassword">New Password</label>
-        <input
-          type="password"
-          id="newpassword"
-          name="newPassword"
-          minLength={8}
-          required
-          autoComplete="new-password"
-        />
+          <label htmlFor="newpassword">New Password</label>
+          <input
+            type="password"
+            id="newpassword"
+            name="newPassword"
+            minLength={8}
+            required
+            autoComplete="new-password"
+          />
 
-        <label htmlFor="confirmpassword">Confirm Password</label>
-        <input
-          type="password"
-          id="confirmpassword"
-          name="confirmPassword"
-          minLength={8}
-          required
-          autoComplete="new-password"
-        />
+          <label htmlFor="confirmpassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmpassword"
+            name="confirmPassword"
+            minLength={8}
+            required
+            autoComplete="new-password"
+          />
 
-        <button type="submit">Save Password</button>
-      </form>
-        : null}
-
+          <button type="submit">Save Password</button>
+        </form>
+      ) : null}
     </div>
   );
 }

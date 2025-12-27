@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Bounce, toast } from "react-toastify";
 
-import '../styles/auth.css';
+import "../styles/auth.css";
 import { useAuth } from "../providers/AuthProvider";
 import axios from "axios";
 
 function AuthPage() {
-  const auth = useAuth()
+  const auth = useAuth();
   const [isActive, setIsActive] = useState(true);
 
   const toggleForm = (e) => {
@@ -16,7 +16,7 @@ function AuthPage() {
 
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-    const itoast = toast.loading('Signing up..', { position: 'bottom-right' })
+    const itoast = toast.loading("Signing up..", { position: "bottom-right" });
 
     const form = e.target;
     const username = form.username.value;
@@ -26,46 +26,47 @@ function AuthPage() {
 
     if (password !== confirmPassword) {
       toast.update(itoast, {
-        render: 'Passwords do not match',
+        render: "Passwords do not match",
         type: "error",
         isLoading: false,
-        autoClose: 2000
-      })
+        autoClose: 2000,
+      });
       return;
     }
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signup`,
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/auth/signup`,
         { username, email, password },
-        { withCredentials: true }
-      )
+        { withCredentials: true },
+      );
 
       toast.update(itoast, {
         render: response.data.message,
         type: "success",
         isLoading: false,
-        autoClose: 2000
-      })
+        autoClose: 2000,
+      });
       form.reset();
-      setIsActive(!isActive)
+      setIsActive(!isActive);
     } catch (error) {
       // console.log('handleSignUpSubmit:error caught')
       // console.error(error);
 
-      let errorMessage = error.response?.data.message
-      errorMessage = errorMessage ? errorMessage : error.message
+      let errorMessage = error.response?.data.message;
+      errorMessage = errorMessage ? errorMessage : error.message;
       toast.update(itoast, {
         render: errorMessage,
         type: "error",
         isLoading: false,
-        autoClose: 2000
-      })
+        autoClose: 2000,
+      });
     }
   };
 
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
-    const itoast = toast.loading('Signing in...', { position: 'bottom-right' })
+    const itoast = toast.loading("Signing in...", { position: "bottom-right" });
 
     const form = e.target;
     const email = form.email.value;
@@ -75,33 +76,32 @@ function AuthPage() {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/auth/signin`,
         { email, password },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
-      auth.setUser(response.data.payload)
-      auth.setIsAuthenticated(true)
+      auth.setUser(response.data.payload);
+      auth.setIsAuthenticated(true);
 
       toast.update(itoast, {
         render: "You've been signed in",
         type: "success",
         isLoading: false,
-        autoClose: 2000
-      })
+        autoClose: 2000,
+      });
       form.reset();
     } catch (error) {
       // console.log('handleSignInSubmit:error caught')
       // console.error(error);
-      let errorMessage = error.response?.data.message
-      errorMessage = errorMessage ? errorMessage : error.message
+      let errorMessage = error.response?.data.message;
+      errorMessage = errorMessage ? errorMessage : error.message;
       toast.update(itoast, {
         render: errorMessage,
         type: "error",
         isLoading: false,
-        autoClose: 2000
-      })
+        autoClose: 2000,
+      });
     }
   };
-
 
   return (
     <div className="auth-page">
@@ -157,10 +157,10 @@ function AuthPage() {
             autoComplete="new-password"
           />
         </div>
-        <button type="submit">
-          Sign up
-        </button>
-        <p>Already have an account? <button onClick={toggleForm}>Sign in</button></p>
+        <button type="submit">Sign up</button>
+        <p>
+          Already have an account? <button onClick={toggleForm}>Sign in</button>
+        </p>
       </form>
 
       <form
@@ -193,7 +193,9 @@ function AuthPage() {
           />
         </div>
         <button type="submit">Sign in</button>
-        <p>Don't have an account? <button onClick={toggleForm}>Sign up</button></p>
+        <p>
+          Don't have an account? <button onClick={toggleForm}>Sign up</button>
+        </p>
       </form>
     </div>
   );

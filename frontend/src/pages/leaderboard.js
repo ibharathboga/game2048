@@ -1,25 +1,26 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-import '../styles/leaderboard.css'
+import "../styles/leaderboard.css";
 
 function LeaderboardPage() {
-
-  const [leaderboard, setLeaderboard] = useState([])
+  const [leaderboard, setLeaderboard] = useState([]);
 
   const leaderboardPageEffect = async () => {
-    console.log('leaderboardPageEffect:invoked')
+    console.log("leaderboardPageEffect:invoked");
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/scores/`,
         { withCredentials: true },
-      )
-      setLeaderboard(prev => response.data)
+      );
+      setLeaderboard((prev) => response.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-  useEffect(() => { leaderboardPageEffect(); }, [])
+  };
+  useEffect(() => {
+    leaderboardPageEffect();
+  }, []);
 
   return (
     <div className="leaderboard-page">
@@ -35,7 +36,10 @@ function LeaderboardPage() {
         </thead>
         <tbody>
           {leaderboard.map((entry, index) => (
-            <tr key={index} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
+            <tr
+              key={index}
+              className={index % 2 === 0 ? "even-row" : "odd-row"}
+            >
               <td>{entry.email}</td>
               <td>{entry.highestTileScore}</td>
               <td>{entry.duration}</td>
@@ -46,6 +50,6 @@ function LeaderboardPage() {
       </table>
     </div>
   );
-};
+}
 
-export default LeaderboardPage
+export default LeaderboardPage;
