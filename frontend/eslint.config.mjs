@@ -11,6 +11,14 @@ export default defineConfig([
     extends: ["js/recommended"],
     languageOptions: { globals: globals.browser },
   },
-  pluginReact.configs.flat.recommended,
+  {
+    ...pluginReact.configs.flat.recommended,
+    ...pluginReact.configs.flat["jsx-runtime"],
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+  },
   eslintConfigPrettier,
 ]);
