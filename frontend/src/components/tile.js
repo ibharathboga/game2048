@@ -1,14 +1,10 @@
 export default function Tile({ id, value, x, y }) {
-  if (!value) return null
+  if (!value) return null;
 
-  const coordinates = { '--x': x, '--y': y }
+  const coordinates = { "--x": x, "--y": y };
   return (
-    <div
-      key={id}
-      className="tile"
-      style={coordinates}
-    >
+    <div key={id} className="tile" style={coordinates}>
       {value}
     </div>
-  )
+  );
 }

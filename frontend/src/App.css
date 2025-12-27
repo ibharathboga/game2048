@@ -1,9 +1,9 @@
 :root {
-  --background-color: #FFFBEB;
-  --font-color: #92400E;
-  --auth-form-border-color: #F59E0B;
-  --input-background-color: #FEF3C7;
-  --button-background-color: #F6DA8D;
+  --background-color: #fffbeb;
+  --font-color: #92400e;
+  --auth-form-border-color: #f59e0b;
+  --input-background-color: #fef3c7;
+  --button-background-color: #f6da8d;
 }
 
 body {

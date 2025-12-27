@@ -65,7 +65,7 @@
   /* background-color: #00BFFF; */
   /* background-color: #0CAFFF; */
 
-  animation: show 100ms ease-in-out
+  animation: show 100ms ease-in-out;
 }
 
 @keyframes show {

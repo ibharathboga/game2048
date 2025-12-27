@@ -1,14 +1,13 @@
 import { GRID_SIZE } from "../config";
-import '../styles/game.css'
+import "../styles/game.css";
 
-import Tile from '../components/tile'
+import Tile from "../components/tile";
 
 import useGame from "../hooks/useGame";
 import useArrowKeyListener from "../hooks/useArrowKeyListener";
 import useGameTracker from "../hooks/useGameTracker";
 
 function GamePage() {
-
   const {
     ping,
     board,
@@ -17,15 +16,15 @@ function GamePage() {
     slideDown,
     slideLeft,
     slideRight,
-    mergeCellAt
+    mergeCellAt,
   } = useGame();
 
   useArrowKeyListener({
     onArrowUp: slideUp,
     onArrowDown: slideDown,
     onArrowLeft: slideLeft,
-    onArrowRight: slideRight
-  })
+    onArrowRight: slideRight,
+  });
 
   const {
     gameTrackerHookPing,
@@ -33,7 +32,7 @@ function GamePage() {
     gameStatus,
     highestTileScore,
     moves,
-    duration
+    duration,
   } = useGameTracker(board);
 
   const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
@@ -41,12 +40,16 @@ function GamePage() {
   ));
 
   const style = {
-    '--cellDimensionCount': GRID_SIZE,
+    "--cellDimensionCount": GRID_SIZE,
   };
 
   const tilesDesign = tiles.map((tile) => (
-    <Tile key={tile.id} {...tile} onTransitionEndCallBack={() => mergeCellAt({ x: tile.x, y: tile.y })} />
-  ))
+    <Tile
+      key={tile.id}
+      {...tile}
+      onTransitionEndCallBack={() => mergeCellAt({ x: tile.x, y: tile.y })}
+    />
+  ));
 
   return (
     <div className="game-page">
