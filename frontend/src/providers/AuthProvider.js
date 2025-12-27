@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
       setIsAuthenticated(true);
     } catch (error) {
       // console.log('checkAuth:error caught');
-      // console.error(error);
+      console.error(error);
     }
     setIsCheckAuthLoading(false);
   };

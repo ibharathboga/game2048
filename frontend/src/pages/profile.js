@@ -5,7 +5,6 @@ import "../styles/profile.css";
 import LoadingPage from "./loading";
 
 import { useAuth } from "../providers/AuthProvider";
-import { useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 
 function ProfilePage() {
@@ -13,8 +12,6 @@ function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleSave = async (e) => {
     console.log("handleSave:invoked");
@@ -90,7 +87,7 @@ function ProfilePage() {
     }
 
     try {
-      const response = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/profile/password`,
         { oldPassword, newPassword },
         { withCredentials: true },

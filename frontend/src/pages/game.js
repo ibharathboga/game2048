@@ -9,7 +9,6 @@ import useGameTracker from "../hooks/useGameTracker";
 
 function GamePage() {
   const {
-    ping,
     board,
     tiles,
     slideUp,
@@ -26,14 +25,7 @@ function GamePage() {
     onArrowRight: slideRight,
   });
 
-  const {
-    gameTrackerHookPing,
-    gameState,
-    gameStatus,
-    highestTileScore,
-    moves,
-    duration,
-  } = useGameTracker(board);
+  const { highestTileScore, moves, duration } = useGameTracker(board);
 
   const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
     <div key={i} className="cell" />

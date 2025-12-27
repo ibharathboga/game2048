@@ -13,7 +13,7 @@ function LeaderboardPage() {
         `${process.env.REACT_APP_API_URL}/scores/`,
         { withCredentials: true },
       );
-      setLeaderboard((prev) => response.data);
+      setLeaderboard(response.data);
     } catch (error) {
       console.log(error);
     }

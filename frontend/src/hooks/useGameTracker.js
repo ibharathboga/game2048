@@ -74,7 +74,7 @@ function useGameTracker(board) {
       else setGameStatus("loose");
 
       try {
-        const response = await axios.post(
+        await axios.post(
           `${process.env.REACT_APP_API_URL}/scores/`,
           { duration, highestTileScore: currHighestTileScore, moves },
           { withCredentials: true },

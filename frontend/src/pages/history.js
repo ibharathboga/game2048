@@ -12,7 +12,7 @@ function HistoryPage() {
         `${process.env.REACT_APP_API_URL}/scores/user`,
         { withCredentials: true },
       );
-      setHistory((prev) => response.data);
+      setHistory(response.data);
     } catch (error) {
       console.log(error);
     }

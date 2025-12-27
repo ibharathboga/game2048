@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import "../styles/auth.css";
 import { useAuth } from "../providers/AuthProvider";
