@@ -194,7 +194,8 @@ function AuthPage() {
         </div>
         <button type="submit">Sign in</button>
         <p>
-          Don't have an account? <button onClick={toggleForm}>Sign up</button>
+          Don&apos;t have an account?{" "}
+          <button onClick={toggleForm}>Sign up</button>
         </p>
       </form>
     </div>
