@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import { GRID_SIZE } from "../config";
 import "../styles/game.css";
 
 import Tile from "../components/tile";
 
 import useGame from "../hooks/useGame";
-import useArrowKeyListener from "../hooks/useArrowKeyListener";
 import useGameTracker from "../hooks/useGameTracker";
 
 function GamePage() {
@@ -18,14 +18,28 @@ function GamePage() {
     mergeCellAt,
   } = useGame();
 
-  useArrowKeyListener({
-    onArrowUp: slideUp,
-    onArrowDown: slideDown,
-    onArrowLeft: slideLeft,
-    onArrowRight: slideRight,
-  });
-
   const { highestTileScore, moves, duration } = useGameTracker(board);
+
+  useEffect(() => {
+    const keyMap = {
+      ArrowUp: slideUp,
+      ArrowDown: slideDown,
+      ArrowLeft: slideLeft,
+      ArrowRight: slideRight,
+    };
+
+    const handleKeyListener = (e) => {
+      const action = keyMap[e.key];
+      if (action) {
+        action();
+      }
+      window.addEventListener("keydown", handleKeyListener, { once: true });
+    };
+    
+    window.addEventListener("keydown", handleKeyListener, { once: true });
+
+    return () => window.removeEventListener("keydown", handleKeyListener);
+  }, [slideUp, slideDown, slideLeft, slideRight]);
 
   const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
     <div key={i} className="cell" />
