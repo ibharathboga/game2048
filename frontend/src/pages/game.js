@@ -1,72 +1,50 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GRID_SIZE } from "../config";
 import "../styles/game.css";
 
 import Tile from "../components/tile";
 
-import useGame from "../hooks/useGame";
-import useGameTracker from "../hooks/useGameTracker";
+import {
+  flatTiles,
+  initialiseBoard,
+  slideMovement,
+} from "../board/boardOperations.js";
+
+const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
+  <div key={i} className="cell" />
+));
 
 function GamePage() {
-  const {
-    board,
-    tiles,
-    slideUp,
-    slideDown,
-    slideLeft,
-    slideRight,
-    mergeCellAt,
-  } = useGame();
+  const [game, setGame] = useState({ board: initialiseBoard(), moves: 0 });
 
-  const { highestTileScore, moves, duration } = useGameTracker(board);
+  const tiles = useMemo(() => flatTiles(game.board), [game.board]);
+  const tilesDesign = tiles.map((tile) => <Tile key={tile.id} {...tile} />);
 
-  useEffect(() => {
-    const keyMap = {
-      ArrowUp: slideUp,
-      ArrowDown: slideDown,
-      ArrowLeft: slideLeft,
-      ArrowRight: slideRight,
-    };
-
-    const handleKeyListener = (e) => {
-      const action = keyMap[e.key];
-      if (action) {
-        action();
-      }
-      window.addEventListener("keydown", handleKeyListener, { once: true });
-    };
-    
-    window.addEventListener("keydown", handleKeyListener, { once: true });
-
-    return () => window.removeEventListener("keydown", handleKeyListener);
-  }, [slideUp, slideDown, slideLeft, slideRight]);
-
-  const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
-    <div key={i} className="cell" />
-  ));
-
-  const style = {
-    "--cellDimensionCount": GRID_SIZE,
+  const handleKeyListener = (e) => {
+    setGame((prev) => {
+      const operation = slideMovement(e.key, prev.board);
+      if (!operation.boardChanged) return prev;
+      return { board: operation.board, moves: prev.moves + 1 };
+    });
   };
 
-  const tilesDesign = tiles.map((tile) => (
-    <Tile
-      key={tile.id}
-      {...tile}
-      onTransitionEndCallBack={() => mergeCellAt({ x: tile.x, y: tile.y })}
-    />
-  ));
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyListener);
+    console.log("useEffect:invoked");
+    return () => window.removeEventListener("keydown", handleKeyListener);
+  }, []);
 
   return (
     <div className="game-page">
-      <div id="grid" style={style}>
+      <h1>game phase: under progress</h1>
+      <div id="grid" style={{ "--cellDimensionCount": GRID_SIZE }}>
         {cells}
         {tilesDesign}
       </div>
       <div className="stats">
-        <p>Highest Tile: {highestTileScore}</p>
-        <p>Moves: {moves}</p>
-        <p>Duration: {duration}s</p>
+        {/* <p>Highest Tile: {highestTileScore}</p> */}
+        <p>Moves: {game.moves}</p>
+        {/* <p>Duration: {duration}s</p> */}
       </div>
     </div>
   );
