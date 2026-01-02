@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { GRID_SIZE, WINNING_SCORE } from "../config";
 import "../styles/game.css";
 
@@ -20,7 +20,6 @@ const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
 function GamePage() {
   const [game, setGame] = useState({ board: initialiseBoard(), moves: 0 });
   const [duration, setDuration] = useState(0);
-  const timerRef = useRef();
   const navigate = useNavigate();
 
   const highestTileScore = useMemo(
@@ -59,10 +58,10 @@ function GamePage() {
   const isTimerRunning = game.moves > 0 && !isGameOver;
   useEffect(() => {
     if (!isTimerRunning) return;
-    timerRef.current = setInterval(() => {
+    const timerId = setInterval(() => {
       setDuration((prev) => prev + 1);
     }, 1000);
-    return () => clearInterval(timerRef.current);
+    return () => clearInterval(timerId);
   }, [isTimerRunning]);
 
   useEffect(() => {
