@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "start",
+			"path": "frontend",
+			"problemMatcher": [],
+			"label": "frontend start",
+			"detail": "node index.js"
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"path": "backend",
+			"problemMatcher": [],
+			"label": "backend start",
+			"detail": "node index.js"
+		}
+	]
+}
