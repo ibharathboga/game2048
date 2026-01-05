@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GRID_SIZE, WINNING_SCORE } from "../config";
 import "../styles/game.css";
 
@@ -49,37 +49,39 @@ function GamePage() {
 
   const isGameOver =
     game.isNoMovesLeft || game.highestTileScore >= WINNING_SCORE;
-    
-    useEffect(() => {
-      if (!isGameOver) {
-        return;
-      }
-      window.removeEventListener("keydown", handleKeyListener);
-      
-      const handleGameOver = async () => {
-        await updateGameHistory({
-          duration,
-          highestTileScore: game.highestTileScore,
-          moves: game.moves,
-        });
-        
-        navigate("/history");
-      };
-      handleGameOver();
-    }, [
-      isGameOver,
-      duration,
-      game.highestTileScore,
-      game.moves,
-      navigate,
-      handleKeyListener,
-    ]);
-    
-    const isTimerRunning = game.moves > 0 && !isGameOver;
-    useEffect(() => {
-      if (!isTimerRunning) return;
-      const timerId = setInterval(() => {
-        setDuration((prev) => prev + 1);
+  const isGameOverHandled = useRef(false);
+  useEffect(() => {
+    if (!isGameOver || isGameOverHandled.current) {
+      return;
+    }
+
+    isGameOverHandled.current = true;
+    window.removeEventListener("keydown", handleKeyListener);
+
+    const handleGameOver = async () => {
+      await updateGameHistory({
+        duration,
+        highestTileScore: game.highestTileScore,
+        moves: game.moves,
+      });
+
+      navigate("/history");
+    };
+    handleGameOver();
+  }, [
+    isGameOver,
+    duration,
+    game.highestTileScore,
+    game.moves,
+    navigate,
+    handleKeyListener,
+  ]);
+
+  const isTimerRunning = game.moves > 0 && !isGameOver;
+  useEffect(() => {
+    if (!isTimerRunning) return;
+    const timerId = setInterval(() => {
+      setDuration((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(timerId);
   }, [isTimerRunning]);
