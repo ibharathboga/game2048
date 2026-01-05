@@ -18,48 +18,68 @@ const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
 ));
 
 function GamePage() {
-  const [game, setGame] = useState({ board: initialiseBoard(), moves: 0 });
+  const [game, setGame] = useState({
+    board: initialiseBoard(),
+    moves: 0,
+    isNoMovesLeft: false,
+    highestTileScore: 2,
+  });
   const [duration, setDuration] = useState(0);
   const navigate = useNavigate();
 
-  const highestTileScore = useMemo(
-    () => getHighestTileValue(game.board),
-    [game.board],
-  );
-  const isNoMovesLeft = useMemo(() => noMovesLeft(game.board), [game.board]);
-  const isGameOver = isNoMovesLeft || highestTileScore >= WINNING_SCORE;
-
   const handleKeyListener = useCallback((e) => {
     setGame((prev) => {
+      if (prev.isNoMovesLeft || prev.highestTileScore >= WINNING_SCORE) {
+        return prev;
+      }
       const operation = slideMovement(e.key, prev.board);
       if (!operation.boardChanged) return prev;
-      return { board: operation.board, moves: prev.moves + 1 };
+
+      return {
+        board: operation.board,
+        moves: prev.moves + 1,
+        isNoMovesLeft: noMovesLeft(operation.board),
+        highestTileScore: getHighestTileValue(operation.board),
+      };
     });
   }, []);
 
   const tiles = useMemo(() => flatTiles(game.board), [game.board]);
   const tilesDesign = tiles.map((tile) => <Tile key={tile.id} {...tile} />);
 
-  useEffect(() => {
-    if (!isGameOver) return;
-
-    const handleGameOver = async () => {
-      await updateGameHistory({
-        duration,
-        highestTileScore,
-        moves: game.moves,
-      });
-
-      navigate("/history");
-    };
-    handleGameOver();
-  }, [isGameOver, game.moves, duration, highestTileScore, navigate]);
-
-  const isTimerRunning = game.moves > 0 && !isGameOver;
-  useEffect(() => {
-    if (!isTimerRunning) return;
-    const timerId = setInterval(() => {
-      setDuration((prev) => prev + 1);
+  const isGameOver =
+    game.isNoMovesLeft || game.highestTileScore >= WINNING_SCORE;
+    
+    useEffect(() => {
+      if (!isGameOver) {
+        return;
+      }
+      window.removeEventListener("keydown", handleKeyListener);
+      
+      const handleGameOver = async () => {
+        await updateGameHistory({
+          duration,
+          highestTileScore: game.highestTileScore,
+          moves: game.moves,
+        });
+        
+        navigate("/history");
+      };
+      handleGameOver();
+    }, [
+      isGameOver,
+      duration,
+      game.highestTileScore,
+      game.moves,
+      navigate,
+      handleKeyListener,
+    ]);
+    
+    const isTimerRunning = game.moves > 0 && !isGameOver;
+    useEffect(() => {
+      if (!isTimerRunning) return;
+      const timerId = setInterval(() => {
+        setDuration((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(timerId);
   }, [isTimerRunning]);
@@ -77,7 +97,7 @@ function GamePage() {
         {tilesDesign}
       </div>
       <div className="stats">
-        <p>Highest Tile: {highestTileScore}</p>
+        <p>Highest Tile: {game.highestTileScore}</p>
         <p>Moves: {game.moves}</p>
         <p>Duration: {duration}s</p>
       </div>
