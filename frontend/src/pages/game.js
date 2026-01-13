@@ -64,7 +64,6 @@ function GamePage() {
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyListener);
-    console.log("useEffect:invoked");
     return () => window.removeEventListener("keydown", handleKeyListener);
   }, [handleKeyListener]);
 
