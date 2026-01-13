@@ -42,13 +42,15 @@ function GamePage() {
   const tilesDesign = tiles.map((tile) => <Tile key={tile.id} {...tile} />);
 
   useEffect(() => {
+    if (!isGameOver) return;
+
     const handleGameOver = async () => {
-      if (!isGameOver) return;
       await updateGameHistory({
         duration,
         highestTileScore,
         moves: game.moves,
       });
+
       navigate("/history");
     };
     handleGameOver();
