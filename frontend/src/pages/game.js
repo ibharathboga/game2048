@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { GRID_SIZE } from "../config";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { GRID_SIZE, WINNING_SCORE } from "../config";
 import "../styles/game.css";
 
 import Tile from "../components/tile";
@@ -9,6 +9,8 @@ import {
   initialiseBoard,
   slideMovement,
 } from "../board/boardOperations.js";
+import { getHighestTileValue, noMovesLeft } from "../board/boardUtils.js";
+import { useNavigate } from "react-router-dom";
 
 const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
   <div key={i} className="cell" />
@@ -16,9 +18,16 @@ const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
 
 function GamePage() {
   const [game, setGame] = useState({ board: initialiseBoard(), moves: 0 });
+  const [duration, setDuration] = useState(0);
+  const timerRef = useRef();
+  const navigate = useNavigate();
 
-  const tiles = useMemo(() => flatTiles(game.board), [game.board]);
-  const tilesDesign = tiles.map((tile) => <Tile key={tile.id} {...tile} />);
+  const highestTileScore = useMemo(
+    () => getHighestTileValue(game.board),
+    [game.board],
+  );
+  const isNoMovesLeft = useMemo(() => noMovesLeft(game.board), [game.board]);
+  const isGameOver = isNoMovesLeft || highestTileScore >= WINNING_SCORE;
 
   const handleKeyListener = (e) => {
     setGame((prev) => {
@@ -27,6 +36,18 @@ function GamePage() {
       return { board: operation.board, moves: prev.moves + 1 };
     });
   };
+
+  const tiles = useMemo(() => flatTiles(game.board), [game.board]);
+  const tilesDesign = tiles.map((tile) => <Tile key={tile.id} {...tile} />);
+
+
+  useEffect(() => {
+    if (game.moves !== 1) return;
+    timerRef.current = setInterval(() => {
+      setDuration((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(timerRef.current);
+  }, [game.moves]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyListener);
@@ -42,9 +63,9 @@ function GamePage() {
         {tilesDesign}
       </div>
       <div className="stats">
-        {/* <p>Highest Tile: {highestTileScore}</p> */}
+        <p>Highest Tile: {highestTileScore}</p>
         <p>Moves: {game.moves}</p>
-        {/* <p>Duration: {duration}s</p> */}
+        <p>Duration: {duration}s</p>
       </div>
     </div>
   );
