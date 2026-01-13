@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GRID_SIZE, WINNING_SCORE } from "../config";
 import "../styles/game.css";
 
@@ -30,13 +30,13 @@ function GamePage() {
   const isNoMovesLeft = useMemo(() => noMovesLeft(game.board), [game.board]);
   const isGameOver = isNoMovesLeft || highestTileScore >= WINNING_SCORE;
 
-  const handleKeyListener = (e) => {
+  const handleKeyListener = useCallback((e) => {
     setGame((prev) => {
       const operation = slideMovement(e.key, prev.board);
       if (!operation.boardChanged) return prev;
       return { board: operation.board, moves: prev.moves + 1 };
     });
-  };
+  }, []);
 
   const tiles = useMemo(() => flatTiles(game.board), [game.board]);
   const tilesDesign = tiles.map((tile) => <Tile key={tile.id} {...tile} />);
@@ -66,7 +66,7 @@ function GamePage() {
     window.addEventListener("keydown", handleKeyListener);
     console.log("useEffect:invoked");
     return () => window.removeEventListener("keydown", handleKeyListener);
-  }, []);
+  }, [handleKeyListener]);
 
   return (
     <div className="game-page">
