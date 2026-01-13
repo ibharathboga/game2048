@@ -10,6 +10,7 @@ import {
   slideMovement,
 } from "../board/boardOperations.js";
 import { getHighestTileValue, noMovesLeft } from "../board/boardUtils.js";
+import { updateGameHistory } from "../board/updateGameHistory.js";
 import { useNavigate } from "react-router-dom";
 
 const cells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => (
@@ -40,6 +41,18 @@ function GamePage() {
   const tiles = useMemo(() => flatTiles(game.board), [game.board]);
   const tilesDesign = tiles.map((tile) => <Tile key={tile.id} {...tile} />);
 
+  useEffect(() => {
+    const handleGameOver = async () => {
+      if (!isGameOver) return;
+      await updateGameHistory({
+        duration,
+        highestTileScore,
+        moves: game.moves,
+      });
+      navigate("/history");
+    };
+    handleGameOver();
+  }, [isGameOver, game.moves, duration, highestTileScore, navigate]);
 
   useEffect(() => {
     if (game.moves !== 1) return;
