@@ -54,13 +54,14 @@ function GamePage() {
     handleGameOver();
   }, [isGameOver, game.moves, duration, highestTileScore, navigate]);
 
+  const isTimerRunning = game.moves > 0 && !isGameOver;
   useEffect(() => {
-    if (game.moves !== 1) return;
+    if (!isTimerRunning) return;
     timerRef.current = setInterval(() => {
       setDuration((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, [game.moves]);
+  }, [isTimerRunning]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyListener);
